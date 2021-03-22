@@ -1,0 +1,7 @@
+<div>
+  <chat-nav-bar *ngIf="(currentUser | async)?.isAdmin"></chat-nav-bar>
+  <div class="container">
+    <chat-threads></chat-threads>
+    <chat-window *ngIf="(currentUser | async)?.isAdmin && showChatWindow"></chat-window>
+  </div>
+</div>

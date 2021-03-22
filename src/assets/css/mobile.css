@@ -1,0 +1,105 @@
+/* iphone from 4 - 8 */
+
+@media only screen 
+  and (min-device-width: 320px) 
+  and (max-device-width: 667px)
+  and (-webkit-min-device-pixel-ratio: 2) {
+
+    .chat-window {
+        width: 100%;
+        margin: 0px;
+        padding: 0px;
+    }
+
+    .panel-container{
+        padding: 0px  !important; 
+    }
+
+    .container {
+        width: 95%;
+    }
+
+}
+
+/* iPhone 6+, 7+ and 8+ to X */
+
+@media only screen 
+  and (min-device-width: 414px) 
+  and (max-device-width: 812px) 
+  and (-webkit-min-device-pixel-ratio: 3) {
+
+    .chat-window {
+        width: 100%;
+        margin: 0px;
+        padding: 0px;
+    }
+
+    .panel-container{
+        padding: 0px  !important; 
+    }
+
+    .container {
+        width: 95%;
+    }
+
+}
+
+/* iphone from 4 - X for emulator */
+
+@media only screen 
+  and (min-width: 320px) 
+  and (max-width: 812px) {
+
+    .chat-window {
+        width: 100%;
+        margin: 0px;
+        padding: 0px;
+        z-index: 11;
+    }
+
+    .panel-container{
+        padding: 0px  !important; 
+    }
+
+    .container {
+        width: 95%;
+    }
+
+    .navbar-header{
+        float: left;
+    }
+
+    .navbar-text {
+        float: right;
+        margin-left: 0px;
+        margin-right: 0px; 
+    }
+
+    .navbar-right {
+        float: right !important;
+        margin-right: 0px; 
+        padding-right: 0px;
+    }
+
+    .media-body {
+        width: auto;
+    }
+
+    .conversation-wrap .conversation div.media-body:nth-child(3) {
+        top: 10px;
+        width: 60px;
+    }
+
+    .desktop-inline-block {
+        display: none;
+    }
+    
+    .mobile-inline-block {
+        display: inline-block;
+    }
+
+    .lb-data .lb-close{
+        display: block;
+    }
+
+}

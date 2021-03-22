@@ -1,0 +1,59 @@
+<div class="chat-window-container">
+  <div class="chat-window" [ngStyle]="{'height': chatWindowHeightDefault > 0 ? chatWindowHeightDefault + 'px' : ''}" [@closeChatWindow]="{value: state, params:{chatWindowHeight: chatWindowHeight}}" (@closeChatWindow.start)="closeChatWindowStarted($event)"
+  (@closeChatWindow.done)="closeChatWindowDone($event)" #chatWindow>
+    <div class="panel-container">
+      <div class="panel panel-default">
+
+        <div class="panel-heading top-bar">
+          <div class="panel-title-container">
+            <h3 class="panel-title">
+              <span class="glyphicon glyphicon-user" style="cursor:default;"></span>
+              <span class="admin-name">{{currentThread.name}}</span>
+            </h3>
+          </div>
+          
+          <div class="panel-buttons-container">
+            <!-- you could put minimize or close buttons here -->
+            <span class="glyphicon glyphicon-chevron-up" [className]="chatWindowCloseIconClass" (click)="close($event)"></span>
+            <!-- message count -->
+            <span class="badge" [ngClass]="{'new-message':newMessage, 'old-message':!newMessage}">{{ messagesCount }}</span>
+            <app-base64-upload (onFileChanged)='getFileAttachment($event)' #appBase64Upload></app-base64-upload>
+            <span tippy [tippyOptions]="{animation:'fade',animateFill:false,html:'#tooltip-remove-circle-icon',size:'large',touchHold:true}" class="glyphicon glyphicon-remove-circle" (click)="hideNgChat($event)"></span>
+            <div id="tooltip-remove-circle-icon" style="display:none;">
+              <p class="tippy-tooltip-custom">Close chat window</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="panel-body msg-container-base" [ngStyle]="{'height': msgContainerBaseHeight > 0 ? msgContainerBaseHeight + 'px' : ''}">
+          <div class="msg-previous-link" [ngStyle]="{'display': threadHasPreviousMessages ? 'block' : 'none'}">
+            <div class="msg-previous-link-spacer"></div>
+            <a class="msg-previous-link-action" (click)="showMessages($event)"><span class="glyphicon glyphicon-eye-open"></span></a>
+            <div class="msg-previous-link-spacer"></div>
+          </div>
+          <div class="msg-previous-link" [ngStyle]="{'display': limitMessages ? 'block' : 'none'}">
+            <div class="msg-previous-link-spacer"></div>
+            <a class="msg-previous-link-action" (click)="hideMessage($event)"><span class="glyphicon glyphicon-eye-close"></span></a>
+            <div class="msg-previous-link-spacer"></div>
+          </div>
+          <chat-message *ngFor="let message of messages | async" [message]="message">
+          </chat-message>
+          <div class="custom-spinner-container-2" *ngIf="showMessageLoader">
+            <div class="custom-spinner-2 custom-spinner color-light size-small">Loading&#8230;</div>
+          </div>
+      </div>
+
+      <div class="panel-footer">
+        <div class="input-group">
+          <input id="ng-chat-message-input" type="text" class="chat-input" placeholder="Write your message here..." (keydown.enter)="onEnter($event)" (focus)="onFocus($event)" [(ngModel)]="draftMessage.text" *ngIf="msgInputHeight === 0" />
+          <textarea id="ng-chat-message-input" class="chat-input" placeholder="Write your message here..." (focus)="onFocus($event)" [(ngModel)]="draftMessage.text" *ngIf="msgInputHeight > 0" [ngStyle]="{'height': msgInputHeight + 'px'}">
+          </textarea>
+          <span class="input-group-btn">
+            <button type="button" class="btn-chat" (click)="onEnter($event)" [ngStyle]="{'height': msgInputHeight > 0 ? msgInputHeight + 'px' : ''}">Send</button>
+          </span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>

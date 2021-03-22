@@ -1,0 +1,55 @@
+<!-- conversations -->
+
+<div class="chat-window-container" *ngIf="!(currentUser | async)?.isAdmin">
+  <div class="chat-window" style="left:0px;" [ngStyle]="{'height': chatWindowHeightDefault > 0 ? chatWindowHeightDefault + 'px' : ''}" [@closeChatWindow]="{value: state, params:{chatWindowHeight: chatWindowHeight}}" (@closeChatWindow.start)="closeChatWindowStarted($event)"
+  (@closeChatWindow.done)="closeChatWindowDone($event)" #chatThreadWindow>
+    <div class="panel-container">
+      <div class="panel panel-default">
+        <div class="panel-heading top-bar">
+          <div class="panel-title-container">
+            <h3 class="panel-title">
+              <span tippy [tippyOptions]="{animation:'fade',animateFill:false,html:'#tooltip-user-icon',size:'large',touchHold:true}" class="glyphicon glyphicon-user" (click)="closeAvatarSelectionContainer($event)"></span>
+              <span class="user-name">{{currentThread.name}}</span>
+            </h3>
+          </div>
+          <div id="tooltip-user-icon" style="display:none;">
+            <p class="tippy-tooltip-custom">Change avatar</p>
+          </div>
+          <div class="panel-buttons-container">
+            <!-- you could put minimize or close buttons here -->
+            <span #glyphiconChevronUp class="glyphicon glyphicon-chevron-up" [className]="chatWindowCloseIconClass" (click)="close($event)"></span>
+            <span class="badge" [ngClass]="{'new-message':newMessage, 'old-message':!newMessage}">{{ messagesCount }}</span>
+            <app-base64-upload (onFileChanged)='getFileAttachment($event)' [currentUser]='currentUser' #appBase64Upload></app-base64-upload>
+            <span tippy [tippyOptions]="{animation:'fade',animateFill:false,html:'#tooltip-remove-circle-icon',size:'large',touchHold:true}" class="glyphicon glyphicon-remove-circle" (click)="hideNgChat($event)"></span>
+            <div id="tooltip-remove-circle-icon" style="display:none;">
+              <p class="tippy-tooltip-custom">Close chat window</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="conversation-wrap">
+
+            <chat-thread
+                *ngFor="let thread of threads | async"
+                [thread]="thread" [file]='file' (onSent)='clearFile($event)' #chatThread>
+            </chat-thread>
+
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="row" *ngIf="(currentUser | async)?.isAdmin">
+  <div class="conversation-wrap">
+
+    <chat-thread
+        *ngFor="let thread of threads | async"
+        [thread]="thread">
+    </chat-thread>
+
+  </div>
+</div>

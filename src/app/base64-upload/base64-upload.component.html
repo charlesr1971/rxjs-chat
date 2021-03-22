@@ -1,0 +1,14 @@
+<div id="base64-upload-button" *ngIf="(!(currentUser | async)?.isAdmin && showFileChangeIcon) || (currentUser | async)?.isAdmin">
+  <form [formGroup]="form">
+    <div class="form-group">
+      <label>
+        <input type="file" id="file" (change)="onFileChangeSecure($event)" #fileInput>
+        <span tippy [tippyOptions]="{animation:'fade',animateFill:false,html:'#tooltip-paperclip-icon',size:'large',touchHold:true}" class="glyphicon glyphicon-paperclip" [ngClass]="{'file-validated':fileStatus == 1,'file-invalidated':fileStatus == 2,'file-empty':fileStatus == 3}"></span>
+      </label>
+    </div>
+  </form>
+</div>
+
+<div id="tooltip-paperclip-icon" style="display:none;">
+  <p class="tippy-tooltip-custom">Attach image file</p>
+</div>

@@ -1,0 +1,2 @@
+
+<div class="custom-spinner-1" [ngClass]="{'color-light':!(currentUser | async)?.isAdmin, 'color-dark':(currentUser | async)?.isAdmin, 'size-small':loaderSize === 'small', 'size-medium':loaderSize === 'medium', 'size-large':loaderSize === 'large', 'size-extra-large':loaderSize === 'extra-large'}" *ngIf="show">Loading&#8230;</div>

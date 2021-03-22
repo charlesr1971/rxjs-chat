@@ -1,0 +1,21 @@
+<div class="msg-container" [ngClass]="{'base-sent': !incoming, 'base-receive': incoming}" [ngStyle]="{'display': display ? 'flex' : 'none'}">
+
+  <div class="avatar"
+       *ngIf="!incoming">
+    <img src="{{message.author.avatarSrc}}">
+  </div>
+
+  <div class="messages"
+    [ngClass]="{'msg-sent': !incoming, 'msg-receive': incoming}">
+    <p>{{message.text}}</p>
+    <p class="time">{{message.author.name}} • {{message.sentAt | fromNow}}</p>
+    <span class="glyphicon glyphicon-paperclip" *ngIf="message.file" (click)="openFile($event)"></span>
+  </div>
+
+  <div class="avatar"
+       *ngIf="incoming">
+    <img src="{{message.author.avatarSrc}}">
+  </div>
+</div>
+
+<div id="lightgallery" *ngIf="message.file"></div>

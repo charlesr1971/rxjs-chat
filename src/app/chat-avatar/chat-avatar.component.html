@@ -1,0 +1,8 @@
+
+<img *ngIf="!avatar.isPlaceholder && !isSafari" class="avatar-image" src="{{ avatar.src }}" (click)="addAvatar($event)" [@scaleImageAvatar]="{value: state, params:{scaleImageAvatarDelay: avatar.delay, opacityImageAvatar:  opacityImageAvatar}}" />
+
+<img *ngIf="avatar.isPlaceholder && !isSafari" class="avatar-placeholder" src="{{ avatar.src }}" [@scaleImageAvatar]="{value: state, params:{scaleImageAvatarDelay: avatar.delay}}" />
+
+<img *ngIf="!avatar.isPlaceholder && isSafari" class="avatar-image avatar-tween-max" src="{{ avatar.src }}" (click)="addAvatar($event)" />
+
+<img *ngIf="avatar.isPlaceholder && isSafari" class="avatar-placeholder avatar-tween-max" src="{{ avatar.src }}" />

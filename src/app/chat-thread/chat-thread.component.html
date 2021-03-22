@@ -1,0 +1,89 @@
+<div class="thread-container">
+
+  <div class="media conversation" [ngClass]="thread.newThreadId == thread.id ? 'new-thread-message' : 'default-thread-message'" [ngStyle]="{'padding': ($currentUser | async)?.isAdmin ? '10px' : '0px'}" #mediaConversation>
+
+    <div class="avatar-selection-container" *ngIf="!($currentUser | async)?.isAdmin" [@closeAvatarSelectionContainer]="{value: state, params:{avatarSelectionContainerHeight: avatarSelectionContainerHeight}}" (@closeAvatarSelectionContainer.done)="closeAvatarSelectionContainerDone($event)" #avatarSelectionContainer>
+      <table class="avatars">
+        <app-chat-avatars *ngFor="let cell of [ { index: 0, from: 0, count: 6 }, { index: 1, from: 6, count: 12 } ]"  [cell]="cell">
+        </app-chat-avatars>
+      </table>
+    </div>
+
+    <div class="pull-left" *ngIf="($currentUser | async)?.isAdmin">
+      <img class="media-object avatar" src="{{thread.avatarSrc}}">
+    </div>
+
+    <div class="media-body" *ngIf="($currentUser | async)?.isAdmin">
+      <h5 class="media-heading contact-name">{{thread.name}}
+        <span *ngIf="selected">&bull;</span>
+      </h5>
+      <small class="message-preview">{{currentMessageText}}</small>
+    </div>
+
+    <div class="panel-body msg-container-base" *ngIf="!($currentUser | async)?.isAdmin" [ngStyle]="{'height': msgContainerBaseHeight > 0 && !($currentUser | async)?.isAdmin ? msgContainerBaseHeight + 'px' : ''}">
+      <div class="msg-previous-link" [ngStyle]="{'display': threadHasPreviousMessages ? 'block' : 'none'}">
+        <div class="msg-previous-link-spacer"></div>
+        <a class="msg-previous-link-action" (click)="showMessages($event)"><span class="glyphicon glyphicon-eye-open"></span></a>
+        <div class="msg-previous-link-spacer"></div>
+      </div>
+      <div class="msg-previous-link" [ngStyle]="{'display': limitMessages ? 'block' : 'none'}">
+        <div class="msg-previous-link-spacer"></div>
+        <a class="msg-previous-link-action" (click)="hideMessage($event)"><span class="glyphicon glyphicon-eye-close"></span></a>
+        <div class="msg-previous-link-spacer"></div>
+      </div>
+      <chat-message *ngFor="let message of messages | async" [message]="message">
+      </chat-message>
+      <div class="custom-spinner-container-2" *ngIf="showMessageLoader">
+        <div class="custom-spinner-2 custom-spinner color-light size-small">Loading&#8230;</div>
+      </div>
+    </div>
+
+    <div class="media-body" *ngIf="($currentUser | async)?.isAdmin">
+      <span class="badge" [ngClass]="{'new-message':newMessage, 'old-message':!newMessage}">{{ messageCount }}</span>
+      <span tippy [tippyOptions]="{animation:'fade',animateFill:false,html:'#tooltip-cog-icon',size:'large',touchHold:true}" class="glyphicon glyphicon-cog" (click)="toggleThreadData($event)"></span>
+      <div id="tooltip-cog-icon" style="display:none;">
+        <p class="tippy-tooltip-custom">User data</p>
+      </div>
+    </div>
+
+    <a (click)="clicked($event)" class="div-link" style="cursor:pointer;" *ngIf="($currentUser | async)?.isAdmin">Select</a>
+    
+  </div>
+
+  <div class="media conversation" *ngIf="($currentUser | async)?.isAdmin && thread.isVisible">
+    <table>
+      <tr>
+        <td>E-mail</td>
+        <td><a href="mailto:{{thread.email}}" *ngIf="thread.email !== ''">{{thread.email}}</a></td>
+      </tr>
+      <tr>
+        <td class="conversation-table-cell-hdivider" colspan="2"></td>
+      </tr>
+      <tr>
+        <td>Logged in at</td>
+        <td>{{thread.lastLogin}}</td>
+      </tr>
+      <tr>
+        <td class="conversation-table-cell-hdivider" colspan="2"></td>
+      </tr>
+      <tr>
+        <td>Logged in for</td>
+        <td><span class="glyphicon glyphicon-time" (click)="toggleThreadTime($event)"></span>{{thread.threadTime}}</td>
+      </tr>
+    </table>
+  </div>
+
+</div>
+
+<div class="chat-window chat-window-user" *ngIf="!($currentUser | async)?.isAdmin || showElement">
+  <div class="panel-footer">
+    <div class="input-group">
+      <input id="ng-chat-message-input" type="text" class="chat-input" placeholder="Write your message here..." (keydown.enter)="onEnter($event)" (focus)="onFocus($event)" [(ngModel)]="draftMessage.text" *ngIf="msgInputHeight === 0" />
+      <textarea id="ng-chat-message-input" class="chat-input" placeholder="Write your message here..." (focus)="onFocus($event)" [(ngModel)]="draftMessage.text" *ngIf="msgInputHeight > 0" [ngStyle]="{'height': msgInputHeight + 'px'}">
+      </textarea>
+      <span class="input-group-btn">
+        <button type="button" class="btn-chat" (click)="onEnter($event)" [ngStyle]="{'height': msgInputHeight > 0 ? msgInputHeight + 'px' : ''}">Send</button>
+      </span>
+    </div>
+  </div>
+</div>
